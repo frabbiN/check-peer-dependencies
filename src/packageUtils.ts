@@ -221,9 +221,9 @@ export function checkPrerelease (version, range) {
 
 function getRegistries() {
   try {
-    const fullPath = path.join(__dirname, '../.include')
-    const data = fs.readFileSync(fullPath, 'utf8')
-    return data.split(/\r?\n/)
+    const fullPath = path.join(__dirname, '../.check-peer-dependencies.json')
+    const data = JSON.parse(fs.readFileSync(fullPath, {encoding: 'utf8'}))
+    return data.include
   } catch (err) {
     console.error(err)
   }
