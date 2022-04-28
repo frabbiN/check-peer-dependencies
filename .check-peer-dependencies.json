@@ -1,0 +1,18 @@
+{
+    "include": ["@dcn",
+        "@ptc",
+        "@ice",
+        "@snow",
+        "@restoration-assurance",
+        "@utilization",
+        "@audit",
+        "@avalanche",
+        "@network-trends",
+        "@advanced-troubleshooter",
+        "@network-timing",
+        "@wavelength-move",
+        "@frost",
+        "mcp",
+        "frost"
+    ]
+}

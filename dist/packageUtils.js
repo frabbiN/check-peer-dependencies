@@ -150,9 +150,9 @@ function checkPrerelease(version, range) {
 exports.checkPrerelease = checkPrerelease;
 function getRegistries() {
     try {
-        var fullPath = path.join(__dirname, '../.include');
-        var data = fs.readFileSync(fullPath, 'utf8');
-        return data.split(/\r?\n/);
+        var fullPath = path.join(__dirname, '../.check-peer-dependencies.json');
+        var data = JSON.parse(fs.readFileSync(fullPath, { encoding: 'utf8' }));
+        return data.include;
     }
     catch (err) {
         console.error(err);
