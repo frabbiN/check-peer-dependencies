@@ -40,7 +40,7 @@ function findPossibleResolution(packageName, allPeerDeps) {
       return allVersions
     }, [])
     return availableVersions.find(ver => requiredPeerVersions.every(peerVer => {
-      return semver.subset(ver, peerVer.version);
+      return semver.subset(ver, peerVer.version, { includePrerelease: true });
     }));
   } catch (err) {
     console.error(err);
