@@ -25,7 +25,7 @@ export function findPossibleResolutions(problems: Dependency[], allPeerDependenc
     const shouldUpgrade = !!problem.installedVersion;
     const resolutionType = shouldUpgrade ? 'upgrade' : problem.isPeerDevDependency ? 'devInstall' : 'install';
     const resolutionVersion = findPossibleResolution(problem.name, allPeerDependencies);
-    const resolution = resolutionVersion ? `${problem.name}@${semver.minVersion(resolutionVersion)}` : null;
+    const resolution = resolutionVersion ? `${problem.name}@${getVersion(problem.name, resolutionVersion)}` : null;
 
     return { problem, resolution, resolutionType } as Resolution;
   })
@@ -46,4 +46,17 @@ function findPossibleResolution(packageName, allPeerDeps) {
     console.error(err);
     console.error();
   }
+}
+
+function getVersion(name, resolutionVersion) {
+  if (resolutionVersion === '*') {
+    try {
+      const command = `npm view ${name} version`
+      const rawVersionsInfo = exec(command, { silent: true }).stdout;
+      return rawVersionsInfo
+    } catch (err) {
+      console.error(err);
+    }
+  }
+  return semver.minVersion(resolutionVersion)
 }

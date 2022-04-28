@@ -2,6 +2,7 @@
 exports.__esModule = true;
 exports.findPossibleResolutions = void 0;
 var semver = require("semver");
+var shelljs_1 = require("shelljs");
 function semverReverseSort(a, b) {
     var lt = semver.lt(a, b);
     var gt = semver.gt(a, b);
@@ -19,7 +20,7 @@ function findPossibleResolutions(problems, allPeerDependencies) {
         var shouldUpgrade = !!problem.installedVersion;
         var resolutionType = shouldUpgrade ? 'upgrade' : problem.isPeerDevDependency ? 'devInstall' : 'install';
         var resolutionVersion = findPossibleResolution(problem.name, allPeerDependencies);
-        var resolution = resolutionVersion ? "".concat(problem.name, "@").concat(semver.minVersion(resolutionVersion)) : null;
+        var resolution = resolutionVersion ? "".concat(problem.name, "@").concat(getVersion(problem.name, resolutionVersion)) : null;
         return { problem: problem, resolution: resolution, resolutionType: resolutionType };
     });
 }
@@ -40,4 +41,17 @@ function findPossibleResolution(packageName, allPeerDeps) {
         console.error(err);
         console.error();
     }
+}
+function getVersion(name, resolutionVersion) {
+    if (resolutionVersion === '*') {
+        try {
+            var command = "npm view ".concat(name, " version");
+            var rawVersionsInfo = (0, shelljs_1.exec)(command, { silent: true }).stdout;
+            return rawVersionsInfo;
+        }
+        catch (err) {
+            console.error(err);
+        }
+    }
+    return semver.minVersion(resolutionVersion);
 }
