@@ -33,7 +33,7 @@ function findPossibleResolution(packageName, allPeerDeps) {
             return allVersions;
         }, []);
         return availableVersions.find(function (ver) { return requiredPeerVersions.every(function (peerVer) {
-            return semver.subset(ver, peerVer.version);
+            return semver.subset(ver, peerVer.version, { includePrerelease: true });
         }); });
     }
     catch (err) {
