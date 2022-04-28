@@ -25,7 +25,7 @@ export function findPossibleResolutions(problems: Dependency[], allPeerDependenc
     const shouldUpgrade = !!problem.installedVersion;
     const resolutionType = shouldUpgrade ? 'upgrade' : problem.isPeerDevDependency ? 'devInstall' : 'install';
     const resolutionVersion = findPossibleResolution(problem.name, allPeerDependencies);
-    const resolution = resolutionVersion ? `${problem.name}@${resolutionVersion}` : null;
+    const resolution = resolutionVersion ? `${problem.name}@${semver.minVersion(resolutionVersion)}` : null;
 
     return { problem, resolution, resolutionType } as Resolution;
   })
@@ -34,19 +34,16 @@ export function findPossibleResolutions(problems: Dependency[], allPeerDependenc
 function findPossibleResolution(packageName, allPeerDeps) {
   const requiredPeerVersions = allPeerDeps.filter(dep => dep.name === packageName);
   // todo: skip this step if only one required peer version and it's an exact version
-  const command = `npm view ${packageName} versions`;
-  let rawVersionsInfo;
   try {
-    rawVersionsInfo = exec(command, { silent: true }).stdout;
-    const availableVersions = JSON.parse(rawVersionsInfo.replace(/'/g, '"')).sort(semverReverseSort);
+    const availableVersions = requiredPeerVersions.reduce( function (allVersions, dep) {
+      allVersions.push(dep.version)
+      return allVersions
+    }, [])
     return availableVersions.find(ver => requiredPeerVersions.every(peerVer => {
-      return modifiedSemverSatisfies(ver, peerVer.version);
+      return semver.subset(ver, peerVer.version);
     }));
   } catch (err) {
-    console.error(`Error while running command: '${command}'`);
     console.error(err);
     console.error();
-    console.error('npm output:');
-    console.error(rawVersionsInfo);
   }
 }
