@@ -47,10 +47,10 @@ const reportPeerDependencyStatus = (dep: Dependency, byDepender: boolean, showSa
     // Do Nothing
   } else if (dep.installedVersion && dep.isPeerOptionalDependency) {
     if (verbose) {
-      errorMessage = `  ☑️   ${message}) OPTIONAL (${dep.installedVersion} is installed)`;
+      errorMessage = `  ☑️   ${message} OPTIONAL (${dep.installedVersion} is installed)`;
     }
   } else if (dep.installedVersion && !dep.unmatchedPrerelease) {
-    errorMessage = `  ⚠   ${message}) (${dep.installedVersion} is installed | prerelease unmatched)`;
+    errorMessage = `  ⚠   ${message} (${dep.installedVersion} is installed | prerelease unmatched)`;
   } else if (dep.isIgnored) {
     if (verbose) {
       errorMessage = `  ☑️   ${message} IGNORED (${dep.name} is not installed)`;
