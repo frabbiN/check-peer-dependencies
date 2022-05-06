@@ -51,11 +51,11 @@ var reportPeerDependencyStatus = function (dep, byDepender, showSatisfiedDep, ve
     }
     else if (dep.installedVersion && dep.isPeerOptionalDependency) {
         if (verbose) {
-            errorMessage = "  \u2611\uFE0F   ".concat(message, ") OPTIONAL (").concat(dep.installedVersion, " is installed)");
+            errorMessage = "  \u2611\uFE0F   ".concat(message, " OPTIONAL (").concat(dep.installedVersion, " is installed)");
         }
     }
     else if (dep.installedVersion && !dep.unmatchedPrerelease) {
-        errorMessage = "  \u26A0   ".concat(message, ") (").concat(dep.installedVersion, " is installed | prerelease unmatched)");
+        errorMessage = "  \u26A0   ".concat(message, " (").concat(dep.installedVersion, " is installed | prerelease unmatched)");
     }
     else if (dep.isIgnored) {
         if (verbose) {
